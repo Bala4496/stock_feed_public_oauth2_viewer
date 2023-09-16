@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stock-feed-viewer-oauth2-app
+    environment:
+      DB_HOST: stock-feed-public-viewer-postgres
+      STOCK_FEED_VIEWER_HOST: stock-feed-viewer-app:8090
+      GOOGLE_CLIENT_ID: 1073533900026-km9jbbarc1h1qt0eehn84qir4g6vri2c.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: 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
+      GITHUB_CLIENT_ID: c715be471b69d0f43e66
+      GITHUB_CLIENT_SECRET: 398eefe0a850ab85c8e8162d1b10ab2c09ef2bfa
+      FACEBOOK_CLIENT_ID: 1962544400780799
+      FACEBOOK_CLIENT_SECRET: 1ec544e448a373b7664926f93d0f7a7d
+    ports:
+      - "9000:9000"
+    networks:
+      - stock-feed-viewer-oauth2
+      - stock-feed-network
+
+  postgres:
+    image: postgres:latest
+    container_name: stock-feed-public-viewer-postgres
+    environment:
+      POSTGRES_DB: stock_feed_public_viewer_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - stock-feed-viewer-oauth2
+
+volumes:
+  postgres_data:
+
+networks:
+  stock-feed-viewer-oauth2:
+  stock-feed-network:
+    external: true
