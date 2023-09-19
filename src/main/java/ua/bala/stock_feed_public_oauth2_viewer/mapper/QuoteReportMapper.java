@@ -9,10 +9,10 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.QuoteReport;
 @Mapper(componentModel = "spring")
 public interface QuoteReportMapper {
 
+    QuoteReport map(QuoteReportDTO quoteReportDTO);
+
     @Mapping(target = "quotes", source = "quotes")
     @Mapping(target = "quotes.gapPercentage", ignore = true)
-    QuoteReportDTO map(QuoteReport quoteReport);
-
     @InheritInverseConfiguration
-    QuoteReport map(QuoteReportDTO quoteReportDTO);
+    QuoteReportDTO map(QuoteReport quoteReport);
 }

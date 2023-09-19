@@ -11,17 +11,14 @@ spring:
       client:
         registration:
           google:
-            clientId: ${GOOGLE_CLIENT_ID:1073533900026-km9jbbarc1h1qt0eehn84qir4g6vri2c.apps.googleusercontent.com}
-            clientSecret: ${GOOGLE_CLIENT_SECRET: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}
+            clientId: ${GOOGLE_CLIENT_ID:1097555316957-s718gdk9rqsd6ain4gkk88nakailnr15.apps.googleusercontent.com}
+            clientSecret: ${GOOGLE_CLIENT_SECRET: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}
             scope:
-              - profile
               - email
+              - profile
           github:
             clientId: ${GITHUB_CLIENT_ID:c715be471b69d0f43e66}
             clientSecret: ${GITHUB_CLIENT_SECRET:398eefe0a850ab85c8e8162d1b10ab2c09ef2bfa}
-          facebook:
-            clientId: ${FACEBOOK_CLIENT_ID:1962544400780799}
-            clientSecret: ${FACEBOOK_CLIENT_SECRET:1ec544e448a373b7664926f93d0f7a7d}
 
   r2dbc:
     url: r2dbc:pool:postgresql://${DB_HOST:localhost}:${DB_PORT:5434}/${DB_DATABASE:stock_feed_public_viewer_db}
@@ -37,7 +34,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: ${MAIL_USERNAME:stock.feed.viewer@gmail.com}
-    password: ${MAIL_PASSWORD:stock-feed-viewer}
+    password: ${MAIL_PASSWORD:isttqmarsbtmujxu}
     properties:
       mail:
         smtp:

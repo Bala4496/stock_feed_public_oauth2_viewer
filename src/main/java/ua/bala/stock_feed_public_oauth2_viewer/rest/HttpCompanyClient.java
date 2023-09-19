@@ -15,8 +15,8 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.Company;
 @Slf4j
 @RequiredArgsConstructor
 public class HttpCompanyClient implements CompanyClient {
-    private static final String COMPANIES_API = "/api/v1/companies";
 
+    private static final String COMPANIES_API = "/api/v1/companies";
     private final WebClient webClient;
     private final CompanyMapper companyMapper;
 

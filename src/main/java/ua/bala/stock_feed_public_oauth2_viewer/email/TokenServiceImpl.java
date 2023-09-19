@@ -2,6 +2,7 @@ package ua.bala.stock_feed_public_oauth2_viewer.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.keygen.Base64StringKeyGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,6 +11,7 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.User;
 import ua.bala.stock_feed_public_oauth2_viewer.repository.TokenRepository;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +41,14 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public Mono<Void> removeToken(String token) {
         return tokenRepository.removeByToken(token);
+    }
+
+    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.DAYS)
+    public void cleanUpExpiredTokens() {
+        tokenRepository.findAll()
+                .filter(Token::isExpired)
+                .flatMap(tokenRepository::delete)
+                .subscribe();
     }
 
     private Token createToken(User user, TokenType tokenType) {

@@ -5,12 +5,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import ua.bala.stock_feed_public_oauth2_viewer.email.TokenType;
-import ua.bala.stock_feed_public_oauth2_viewer.model.User;
-import ua.bala.stock_feed_public_oauth2_viewer.model.UserRole;
 import ua.bala.stock_feed_public_oauth2_viewer.email.EmailService;
 import ua.bala.stock_feed_public_oauth2_viewer.email.Token;
 import ua.bala.stock_feed_public_oauth2_viewer.email.TokenService;
+import ua.bala.stock_feed_public_oauth2_viewer.email.TokenType;
+import ua.bala.stock_feed_public_oauth2_viewer.model.Provider;
+import ua.bala.stock_feed_public_oauth2_viewer.model.User;
+import ua.bala.stock_feed_public_oauth2_viewer.model.UserRole;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +25,27 @@ public class RegisterServiceImpl implements RegisterService {
     private final EmailService emailService;
 
     @Override
+    public Mono<User> registerUser(String registrationId, String authName) {
+        return Mono.just(new User()
+                        .setEmail(authName)
+                        .setPassword("oAuthDriven")
+                        .setRole(UserRole.ROLE_USER)
+                        .setProvider(setProviderData(registrationId))
+                        .setEnabled(true))
+                .filterWhen(user -> userService.existsByEmailAndProvider(user.getEmail(), user.getProvider()).map(exists -> !exists))
+                .flatMap(userService::save);
+    }
+
+    private Provider setProviderData(String registrationId) {
+        return Optional.of(Provider.valueOf(registrationId.toUpperCase()))
+                .filter(s -> !Provider.LOCAL.equals(s))
+                .orElseThrow(() -> new IllegalArgumentException("RegistrationId LOCAL not supported for OAuth2 Users"));
+    }
+
+    @Override
     public Mono<User> registerUser(User user) {
         user.setRole(UserRole.ROLE_USER);
+        user.setProvider(Provider.LOCAL);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.save(user)
                 .doOnSuccess(emailService::sendRegistrationConfirmationEmail);

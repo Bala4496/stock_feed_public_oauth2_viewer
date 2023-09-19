@@ -7,19 +7,19 @@ import ua.bala.stock_feed_public_oauth2_viewer.dto.RegisterUserDTO;
 import ua.bala.stock_feed_public_oauth2_viewer.dto.UserDTO;
 import ua.bala.stock_feed_public_oauth2_viewer.mapper.RegisterUserMapper;
 import ua.bala.stock_feed_public_oauth2_viewer.mapper.UserMapper;
-import ua.bala.stock_feed_public_oauth2_viewer.service.RegisterServiceImpl;
+import ua.bala.stock_feed_public_oauth2_viewer.service.RegisterService;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/register")
+@RequiredArgsConstructor
 public class RegisterController {
 
-    private final RegisterServiceImpl registerService;
+    private final RegisterService registerService;
     private final RegisterUserMapper registerUserMapper;
     private final UserMapper userMapper;
 
     @PostMapping
-    public Mono<RegisterUserDTO> register(@RequestBody RegisterUserDTO registerUserDTO) {
+    public Mono<RegisterUserDTO> registerUser(@RequestBody RegisterUserDTO registerUserDTO) {
         return registerService.registerUser(registerUserMapper.map(registerUserDTO))
                 .map(registerUserMapper::map);
     }

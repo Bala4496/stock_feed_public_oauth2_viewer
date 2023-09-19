@@ -14,6 +14,7 @@ import ua.bala.stock_feed_public_oauth2_viewer.email.EmailServiceImpl;
 import ua.bala.stock_feed_public_oauth2_viewer.email.Token;
 import ua.bala.stock_feed_public_oauth2_viewer.email.TokenService;
 import ua.bala.stock_feed_public_oauth2_viewer.email.TokenType;
+import ua.bala.stock_feed_public_oauth2_viewer.model.Provider;
 import ua.bala.stock_feed_public_oauth2_viewer.model.User;
 import ua.bala.stock_feed_public_oauth2_viewer.repository.UserRepository;
 
@@ -57,6 +58,11 @@ public class UserServiceImpl implements UserService, ReactiveUserDetailsService 
     public Mono<User> getByEmail(String email) {
         return userRepository.findByEmailAndEnabledTrue(email)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT, "User by email: %s - not found".formatted(email))));
+    }
+
+    @Override
+    public Mono<Boolean> existsByEmailAndProvider(String email, Provider provider) {
+        return userRepository.existsByEmailAndProviderAndEnabledTrue(email, provider);
     }
 
     @Override

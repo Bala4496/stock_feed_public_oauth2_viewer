@@ -2,12 +2,13 @@ create table users
 (
     id         serial primary key,
     email      varchar(64) not null unique,
-    username   varchar(64) not null unique,
     password   varchar(64) not null,
+    provider   varchar(64) not null,
     role       varchar(32) not null,
     enabled    boolean     not null default true,
     created_at timestamp   not null default now(),
-    updated_at timestamp   not null default now()
+    updated_at timestamp   not null default now(),
+    unique (email, provider)
 );
 
 create table tokens

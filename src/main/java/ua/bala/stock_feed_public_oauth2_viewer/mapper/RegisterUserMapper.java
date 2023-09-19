@@ -9,12 +9,12 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.User;
 @Mapper(componentModel = "spring")
 public interface RegisterUserMapper {
 
-    @Mapping(target = "password", ignore = true)
-    RegisterUserDTO map(User user);
-
-    @InheritInverseConfiguration
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     User map(RegisterUserDTO registerUserDTO);
+
+    @Mapping(target = "password", ignore = true)
+    @InheritInverseConfiguration
+    RegisterUserDTO map(User user);
 }

@@ -9,6 +9,8 @@ services:
     environment:
       DB_HOST: stock-feed-public-viewer-postgres
       STOCK_FEED_VIEWER_HOST: stock-feed-viewer-app:8090
+      MAIL_USERNAME: stock.feed.viewer@gmail.com
+      MAIL_PASSWORD: isttqmarsbtmujxu
       GOOGLE_CLIENT_ID: 1073533900026-km9jbbarc1h1qt0eehn84qir4g6vri2c.apps.googleusercontent.com
       GOOGLE_CLIENT_SECRET: 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
       GITHUB_CLIENT_ID: c715be471b69d0f43e66
