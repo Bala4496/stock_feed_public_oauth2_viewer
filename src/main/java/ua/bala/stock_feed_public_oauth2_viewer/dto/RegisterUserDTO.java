@@ -12,7 +12,6 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.UserRole;
 public class RegisterUserDTO {
 
     private String email;
-    private String username;
     private String password;
     private UserRole role;
     private boolean enabled;

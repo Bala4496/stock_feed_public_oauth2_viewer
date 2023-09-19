@@ -2,46 +2,24 @@ package ua.bala.stock_feed_public_oauth2_viewer.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-import ua.bala.stock_feed_public_oauth2_viewer.email.EmailServiceImpl;
-import ua.bala.stock_feed_public_oauth2_viewer.email.Token;
 import ua.bala.stock_feed_public_oauth2_viewer.email.TokenService;
-import ua.bala.stock_feed_public_oauth2_viewer.email.TokenType;
 import ua.bala.stock_feed_public_oauth2_viewer.model.Provider;
 import ua.bala.stock_feed_public_oauth2_viewer.model.User;
 import ua.bala.stock_feed_public_oauth2_viewer.repository.UserRepository;
 
-import java.util.Collections;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService, ReactiveUserDetailsService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailServiceImpl emailService;
     private final TokenService tokenService;
-
-    @Override
-    public Mono<UserDetails> findByUsername(String email) {
-        return userRepository.findByEmailAndEnabledTrue(email)
-                .map(user -> new org.springframework.security.core.userdetails.User(
-                        user.getEmail(),
-                        user.getPassword(),
-                        user.isEnabled(),
-                        true,
-                        true,
-                        true,
-                        Collections.singletonList(new SimpleGrantedAuthority(user.getRole().toString())))
-                );
-    }
 
     @Override
     public Mono<User> save(User user) {
@@ -61,31 +39,27 @@ public class UserServiceImpl implements UserService, ReactiveUserDetailsService 
     }
 
     @Override
-    public Mono<Boolean> existsByEmailAndProvider(String email, Provider provider) {
-        return userRepository.existsByEmailAndProviderAndEnabledTrue(email, provider);
+    public Mono<Boolean> existsByEmail(String email) {
+        return userRepository.existsByEmailAndEnabledTrue(email);
     }
 
     @Override
-    public Mono<Void> resetPasswordByEmail(String email) {
+    public Mono<User> resetPasswordByEmail(String email) {
         return userRepository.findByEmail(email)
+                .filter(user -> Provider.LOCAL.equals(user.getProvider()))
                 .map(user -> user.setEnabled(false))
-                .flatMap(this::save)
-                .doOnSuccess(emailService::sendResetPasswordEmail)
-                .then();
+                .flatMap(this::save);
     }
 
     @Override
     public Mono<User> setNewPassword(String token, String newPassword) {
-        return tokenService.findToken(token)
-                .filter(foundType -> TokenType.RESET_PASSWORD.equals(foundType.getType()))
-                .switchIfEmpty(Mono.error(new IllegalArgumentException("Token type isn't right")))
-                .map(Token::getUserId)
-                .flatMap(this::getById)
-                .map(user -> user.setPassword(encodePassword(newPassword)))
-                .map(user -> user.setEnabled(true))
-                .flatMap(this::save)
-                .publishOn(Schedulers.boundedElastic())
-                .doOnSuccess(user -> tokenService.removeToken(token).subscribe());
+        return processToken(token, user -> user.setEnabled(true).setPassword(encodePassword(newPassword)));
+    }
+
+    @Override
+    public Mono<User> processToken(String token, Function<User, User> userFunction) {
+        return tokenService.processUserToken(token, id -> getById(id).map(userFunction)
+                .flatMap(this::save));
     }
 
     private String encodePassword(String newPassword) {

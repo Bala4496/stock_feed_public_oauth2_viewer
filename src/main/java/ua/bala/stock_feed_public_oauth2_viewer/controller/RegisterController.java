@@ -14,19 +14,19 @@ import ua.bala.stock_feed_public_oauth2_viewer.service.RegisterService;
 @RequiredArgsConstructor
 public class RegisterController {
 
-    private final RegisterService registerService;
+    private final RegisterService registerServiceEmailDecorator;
     private final RegisterUserMapper registerUserMapper;
     private final UserMapper userMapper;
 
     @PostMapping
     public Mono<RegisterUserDTO> registerUser(@RequestBody RegisterUserDTO registerUserDTO) {
-        return registerService.registerUser(registerUserMapper.map(registerUserDTO))
+        return registerServiceEmailDecorator.registerUser(registerUserMapper.map(registerUserDTO))
                 .map(registerUserMapper::map);
     }
 
     @GetMapping("/verify")
     public Mono<UserDTO> verifyEmail(@RequestParam("token") String token) {
-        return registerService.confirmEmail(token)
+        return registerServiceEmailDecorator.confirmRegisterUser(token)
                 .map(userMapper::map);
     }
 }

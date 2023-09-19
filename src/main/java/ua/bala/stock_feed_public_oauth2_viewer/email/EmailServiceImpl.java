@@ -20,17 +20,9 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
 
     @Override
-    public void sendRegistrationConfirmationEmail(User user) {
+    public void sendRegistrationEmail(User user) {
         tokenService.createRegisterToken(user)
                 .map(token -> buildRegistrationConfirmationEmail(user.getEmail(), token.getToken()))
-                .doOnNext(mailSender::send)
-                .subscribe();
-    }
-
-    @Override
-    public void sendResetPasswordEmail(User user) {
-        tokenService.createResetPasswordToken(user)
-                .map(token -> buildResetPasswordEmail(user.getEmail(), token.getToken()))
                 .doOnNext(mailSender::send)
                 .subscribe();
     }
@@ -40,6 +32,14 @@ public class EmailServiceImpl implements EmailService {
         var message = "Confirm, your email to finish registration on Stock Feed Viewer.";
         var confirmationUrl = HOST_URL.formatted(hostPort).concat(REGISTER_REGISTRATION_CONFIRM_TOKEN_API.formatted(token));
         return buildSimpleMessage(userEmail, subject, message, confirmationUrl);
+    }
+
+    @Override
+    public void sendResetPasswordEmail(User user) {
+        tokenService.createResetPasswordToken(user)
+                .map(token -> buildResetPasswordEmail(user.getEmail(), token.getToken()))
+                .doOnNext(mailSender::send)
+                .subscribe();
     }
 
     private SimpleMailMessage buildResetPasswordEmail(String userEmail, String token) {

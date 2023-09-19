@@ -17,7 +17,7 @@ import javax.naming.OperationNotSupportedException;
 @RequiredArgsConstructor
 public class CustomReactiveOAuth2AuthorizedClientService implements ReactiveOAuth2AuthorizedClientService {
 
-    private final RegisterService registerService;
+    private final RegisterService registerServiceImpl;
 
     @SneakyThrows
     @Override
@@ -33,7 +33,7 @@ public class CustomReactiveOAuth2AuthorizedClientService implements ReactiveOAut
         var registrationId = authorizedClient.getClientRegistration().getRegistrationId().toUpperCase();
         return Mono.justOrEmpty(authentication)
                 .map(Authentication::getName)
-                .flatMap(authName -> registerService.registerUser(registrationId, authName))
+                .flatMap(authName -> registerServiceImpl.registerOAuth2User(registrationId, authName))
                 .then();
     }
 

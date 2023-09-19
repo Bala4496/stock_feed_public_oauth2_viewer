@@ -7,8 +7,7 @@ create table users
     role       varchar(32) not null,
     enabled    boolean     not null default true,
     created_at timestamp   not null default now(),
-    updated_at timestamp   not null default now(),
-    unique (email, provider)
+    updated_at timestamp   not null default now()
 );
 
 create table tokens

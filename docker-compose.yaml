@@ -6,8 +6,10 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: stock-feed-viewer-oauth2-app
+    depends_on:
+      - postgres
     environment:
-      DB_HOST: stock-feed-public-viewer-postgres
+      DB_HOST: stock-feed-public-viewer-postgres:5432
       STOCK_FEED_VIEWER_HOST: stock-feed-viewer-app:8090
       MAIL_USERNAME: stock.feed.viewer@gmail.com
       MAIL_PASSWORD: isttqmarsbtmujxu
@@ -20,7 +22,7 @@ services:
     ports:
       - "9000:9000"
     networks:
-      - stock-feed-viewer-oauth2
+      - stock-feed-viewer-oauth2-network
       - stock-feed-network
 
   postgres:
@@ -35,12 +37,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - stock-feed-viewer-oauth2
+      - stock-feed-viewer-oauth2-network
 
 volumes:
   postgres_data:
 
 networks:
-  stock-feed-viewer-oauth2:
+  stock-feed-viewer-oauth2-network:
   stock-feed-network:
     external: true

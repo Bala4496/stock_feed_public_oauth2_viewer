@@ -15,24 +15,25 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserService userServiceEmailDecorator;
     private final UserMapper userMapper;
 
     @GetMapping("/resetPassword")
     public Mono<Void> resetPasswordByEmail(@RequestParam("email") String email) {
-        return userService.resetPasswordByEmail(email);
+        return userServiceEmailDecorator.resetPasswordByEmail(email)
+                .then();
     }
 
     @PostMapping("/resetPassword")
     public Mono<UserDTO> setNewPassword(@RequestParam("token") String token,
                                         @RequestBody NewPasswordDTO newPasswordDTO) {
-        return userService.setNewPassword(token, newPasswordDTO.getNewPassword())
+        return userServiceEmailDecorator.setNewPassword(token, newPasswordDTO.getNewPassword())
                 .map(userMapper::map);
     }
 
     @GetMapping("/info")
     public Mono<UserDTO> getInfo(Principal principal) {
-        return userService.getByEmail(principal.getName())
+        return userServiceEmailDecorator.getByEmail(principal.getName())
                 .map(userMapper::map);
     }
 }

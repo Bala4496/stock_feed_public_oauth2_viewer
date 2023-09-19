@@ -4,6 +4,6 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.User;
 
 public interface EmailService {
 
-    void sendRegistrationConfirmationEmail(User user);
+    void sendRegistrationEmail(User user);
     void sendResetPasswordEmail(User user);
 }

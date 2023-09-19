@@ -10,6 +10,7 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.User;
 public interface RegisterUserMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "provider", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     User map(RegisterUserDTO registerUserDTO);
