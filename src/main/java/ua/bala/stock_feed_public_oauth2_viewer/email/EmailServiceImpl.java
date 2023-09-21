@@ -14,7 +14,7 @@ public class EmailServiceImpl implements EmailService {
     @Value("${server.port}")
     public int hostPort;
     public static final String HOST_URL = "http://localhost:%d";
-    public static final String USER_RESET_PASSWORD_TOKEN_API = "/api/v1/user/resetPassword?token=%s";
+    public static final String USER_RESET_PASSWORD_TOKEN_API = "/api/v1/user/reset-password/verify?token=%s";
     public static final String REGISTER_REGISTRATION_CONFIRM_TOKEN_API = "/api/v1/register/verify?token=%s";
     private final TokenService tokenService;
     private final JavaMailSender mailSender;

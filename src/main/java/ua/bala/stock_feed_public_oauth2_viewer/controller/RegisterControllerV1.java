@@ -12,7 +12,7 @@ import ua.bala.stock_feed_public_oauth2_viewer.service.RegisterService;
 @RestController
 @RequestMapping("/api/v1/register")
 @RequiredArgsConstructor
-public class RegisterController {
+public class RegisterControllerV1 {
 
     private final RegisterService registerServiceEmailDecorator;
     private final RegisterUserMapper registerUserMapper;

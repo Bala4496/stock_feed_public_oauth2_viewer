@@ -13,18 +13,18 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserControllerV1 {
 
     private final UserService userServiceEmailDecorator;
     private final UserMapper userMapper;
 
-    @GetMapping("/resetPassword")
+    @PostMapping("/reset-password/initiate")
     public Mono<Void> resetPasswordByEmail(@RequestParam("email") String email) {
         return userServiceEmailDecorator.resetPasswordByEmail(email)
                 .then();
     }
 
-    @PostMapping("/resetPassword")
+    @PostMapping("/reset-password/verify")
     public Mono<UserDTO> setNewPassword(@RequestParam("token") String token,
                                         @RequestBody NewPasswordDTO newPasswordDTO) {
         return userServiceEmailDecorator.setNewPassword(token, newPasswordDTO.getNewPassword())

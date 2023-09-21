@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import ua.bala.stock_feed_public_oauth2_viewer.model.Token;
+import ua.bala.stock_feed_public_oauth2_viewer.model.TokenType;
 import ua.bala.stock_feed_public_oauth2_viewer.model.User;
 import ua.bala.stock_feed_public_oauth2_viewer.repository.TokenRepository;
 
@@ -69,7 +71,7 @@ public class TokenServiceImpl implements TokenService {
 
     private Token createToken(User user, TokenType tokenType) {
         return new Token().setUserId(user.getId())
-                .setToken(keyGenerator.generateKey())
+                .setToken(keyGenerator.generateKey().replaceAll("\\+", "_"))
                 .setType(tokenType)
                 .setExpireAt(LocalDateTime.now().plusMinutes(tokenType.getExpirationLimit()));
     }

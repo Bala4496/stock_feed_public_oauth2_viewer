@@ -45,6 +45,10 @@ spring:
 stock-feed-viewer-api:
   url: ${STOCK_FEED_VIEWER_HOST:localhost:8090}
 
+jwt:
+  secret: ${JWT_SECRET_KEY:eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5NTMyNjM3MCwiaWF0IjoxNjk1MzI2MzcwfQ.I5CchpuYp0bkDqLJomwgFC2ndnG5oH2Gny7z5y2uQ_E}
+  expiration: ${JWT_EXPIRATION_TIME:86400000} # 24 * 60 * 60 * 1000 = 24 hours
+
 logging:
   level:
     org:

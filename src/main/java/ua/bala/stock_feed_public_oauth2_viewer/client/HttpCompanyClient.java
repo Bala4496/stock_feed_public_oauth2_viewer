@@ -1,4 +1,4 @@
-package ua.bala.stock_feed_public_oauth2_viewer.rest;
+package ua.bala.stock_feed_public_oauth2_viewer.client;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

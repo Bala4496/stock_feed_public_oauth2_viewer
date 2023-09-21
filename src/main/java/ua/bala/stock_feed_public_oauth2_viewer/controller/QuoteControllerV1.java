@@ -14,20 +14,20 @@ import ua.bala.stock_feed_public_oauth2_viewer.mapper.QuoteReportMapper;
 import ua.bala.stock_feed_public_oauth2_viewer.service.QuoteService;
 
 @RestController
-@RequestMapping("/api/v1/stocks")
+@RequestMapping("/api/v1/quotes")
 @RequiredArgsConstructor
-public class QuoteController {
+public class QuoteControllerV1 {
 
     private final QuoteService quoteService;
     private final QuoteMapper quoteMapper;
     private final QuoteReportMapper quoteReportMapper;
 
-    @GetMapping("/quotes")
+    @GetMapping
     public Flux<QuoteDTO> getQuotes() {
         return quoteService.getQuotes().map(quoteMapper::map);
     }
 
-    @GetMapping("/{code}/quote")
+    @GetMapping("/{code}")
     public Mono<QuoteDTO> getQuotesByCompanyCode(@PathVariable String code) {
         return quoteService.getQuoteByCompanyCode(code).map(quoteMapper::map);
     }

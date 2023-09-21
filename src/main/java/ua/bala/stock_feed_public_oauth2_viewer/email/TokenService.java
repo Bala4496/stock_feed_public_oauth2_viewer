@@ -1,6 +1,7 @@
 package ua.bala.stock_feed_public_oauth2_viewer.email;
 
 import reactor.core.publisher.Mono;
+import ua.bala.stock_feed_public_oauth2_viewer.model.Token;
 import ua.bala.stock_feed_public_oauth2_viewer.model.User;
 
 import java.util.function.Function;

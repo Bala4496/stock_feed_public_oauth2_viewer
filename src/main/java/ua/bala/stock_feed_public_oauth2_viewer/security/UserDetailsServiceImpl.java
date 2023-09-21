@@ -1,4 +1,4 @@
-package ua.bala.stock_feed_public_oauth2_viewer.service;
+package ua.bala.stock_feed_public_oauth2_viewer.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

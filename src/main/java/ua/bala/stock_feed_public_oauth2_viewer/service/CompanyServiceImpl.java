@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import ua.bala.stock_feed_public_oauth2_viewer.model.Company;
-import ua.bala.stock_feed_public_oauth2_viewer.rest.CompanyClient;
+import ua.bala.stock_feed_public_oauth2_viewer.client.CompanyClient;
 
 @Service
 @RequiredArgsConstructor

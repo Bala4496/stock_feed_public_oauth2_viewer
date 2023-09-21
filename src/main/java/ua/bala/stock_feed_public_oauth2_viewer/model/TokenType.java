@@ -1,4 +1,4 @@
-package ua.bala.stock_feed_public_oauth2_viewer.email;
+package ua.bala.stock_feed_public_oauth2_viewer.model;
 
 import lombok.Getter;
 
