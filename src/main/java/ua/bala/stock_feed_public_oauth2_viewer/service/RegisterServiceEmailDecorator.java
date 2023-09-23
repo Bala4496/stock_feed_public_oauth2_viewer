@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import ua.bala.stock_feed_public_oauth2_viewer.email.EmailService;
-import ua.bala.stock_feed_public_oauth2_viewer.model.User;
+import ua.bala.stock_feed_public_oauth2_viewer.model.entity.User;
+import ua.bala.stock_feed_public_oauth2_viewer.service.email.EmailService;
+import ua.bala.stock_feed_public_oauth2_viewer.service.email.TokenService;
 
 @Service
 public class RegisterServiceEmailDecorator extends RegisterServiceImpl {
@@ -14,14 +15,15 @@ public class RegisterServiceEmailDecorator extends RegisterServiceImpl {
 
     public RegisterServiceEmailDecorator(@Qualifier("userServiceImpl") UserService userService,
                                          PasswordEncoder passwordEncoder,
+                                         TokenService tokenService,
                                          EmailService emailService) {
-        super(userService, passwordEncoder);
+        super(userService, passwordEncoder, tokenService);
         this.emailService = emailService;
     }
 
     @Override
-    public Mono<User> registerUser(User user) {
-        return super.registerUser(user)
+    public Mono<User> registerLocalUser(User user) {
+        return super.registerLocalUser(user)
                 .doOnSuccess(emailService::sendRegistrationEmail);
     }
 }

@@ -3,7 +3,7 @@ FROM gradle:8.2.1-jdk17 AS build
 WORKDIR /app
 COPY build.gradle settings.gradle ./
 COPY src ./src
-RUN gradle clean build --refresh-dependencies
+RUN gradle clean build -x test
 
 # Creating the Docker image
 FROM openjdk:17-jdk-slim

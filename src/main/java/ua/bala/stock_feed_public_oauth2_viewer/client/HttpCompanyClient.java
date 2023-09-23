@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ua.bala.stock_feed_public_oauth2_viewer.dto.CompanyDTO;
 import ua.bala.stock_feed_public_oauth2_viewer.mapper.CompanyMapper;
-import ua.bala.stock_feed_public_oauth2_viewer.model.Company;
+import ua.bala.stock_feed_public_oauth2_viewer.model.common.Company;
 
 @Component
 @Slf4j
@@ -33,6 +33,7 @@ public class HttpCompanyClient implements CompanyClient {
                         error -> Mono.error(new RuntimeException("API not found")))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToFlux(CompanyDTO.class);
+                .bodyToFlux(CompanyDTO.class)
+                .retry();
     }
 }

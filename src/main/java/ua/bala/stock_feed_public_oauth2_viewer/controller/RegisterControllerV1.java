@@ -20,7 +20,7 @@ public class RegisterControllerV1 {
 
     @PostMapping
     public Mono<RegisterUserDTO> registerUser(@RequestBody RegisterUserDTO registerUserDTO) {
-        return registerServiceEmailDecorator.registerUser(registerUserMapper.map(registerUserDTO))
+        return registerServiceEmailDecorator.registerLocalUser(registerUserMapper.map(registerUserDTO))
                 .map(registerUserMapper::map);
     }
 

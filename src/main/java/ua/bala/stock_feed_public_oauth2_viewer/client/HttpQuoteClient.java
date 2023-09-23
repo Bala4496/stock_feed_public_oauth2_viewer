@@ -11,8 +11,8 @@ import ua.bala.stock_feed_public_oauth2_viewer.dto.QuoteDTO;
 import ua.bala.stock_feed_public_oauth2_viewer.dto.QuoteReportDTO;
 import ua.bala.stock_feed_public_oauth2_viewer.mapper.QuoteMapper;
 import ua.bala.stock_feed_public_oauth2_viewer.mapper.QuoteReportMapper;
-import ua.bala.stock_feed_public_oauth2_viewer.model.Quote;
-import ua.bala.stock_feed_public_oauth2_viewer.model.QuoteReport;
+import ua.bala.stock_feed_public_oauth2_viewer.model.common.Quote;
+import ua.bala.stock_feed_public_oauth2_viewer.model.common.QuoteReport;
 
 @Component
 @Slf4j
@@ -40,7 +40,8 @@ public class HttpQuoteClient implements QuoteClient {
                         error -> Mono.error(new RuntimeException("API not found")))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToFlux(QuoteDTO.class);
+                .bodyToFlux(QuoteDTO.class)
+                .retry();
     }
 
     @Override
@@ -56,7 +57,8 @@ public class HttpQuoteClient implements QuoteClient {
                         error -> Mono.error(new RuntimeException("API not found")))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToMono(QuoteDTO.class);
+                .bodyToMono(QuoteDTO.class)
+                .retry();
     }
 
     @Override
@@ -72,6 +74,7 @@ public class HttpQuoteClient implements QuoteClient {
                         error -> Mono.error(new RuntimeException("API not found")))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToFlux(QuoteReportDTO.class);
+                .bodyToFlux(QuoteReportDTO.class)
+                .retry();
     }
 }

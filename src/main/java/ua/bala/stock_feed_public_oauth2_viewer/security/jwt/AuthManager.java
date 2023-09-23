@@ -15,12 +15,11 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AuthManager implements ReactiveAuthenticationManager {
 
-    private final TokenUtil TokenUtil;
+    private final ua.bala.stock_feed_public_oauth2_viewer.util.TokenUtil TokenUtil;
     private final ReactiveUserDetailsService reactiveUserDetailsService;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        System.out.println("AuthManager");
         return Mono.justOrEmpty(authentication)
                 .cast(BearerToken.class)
                 .flatMap(auth -> {

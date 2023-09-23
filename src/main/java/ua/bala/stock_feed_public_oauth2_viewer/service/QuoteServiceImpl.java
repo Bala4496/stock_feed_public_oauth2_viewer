@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ua.bala.stock_feed_public_oauth2_viewer.model.Quote;
-import ua.bala.stock_feed_public_oauth2_viewer.model.QuoteReport;
 import ua.bala.stock_feed_public_oauth2_viewer.client.QuoteClient;
+import ua.bala.stock_feed_public_oauth2_viewer.model.common.Quote;
+import ua.bala.stock_feed_public_oauth2_viewer.model.common.QuoteReport;
 
 @Service
 @RequiredArgsConstructor

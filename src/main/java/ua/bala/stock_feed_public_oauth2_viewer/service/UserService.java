@@ -1,9 +1,7 @@
 package ua.bala.stock_feed_public_oauth2_viewer.service;
 
 import reactor.core.publisher.Mono;
-import ua.bala.stock_feed_public_oauth2_viewer.model.User;
-
-import java.util.function.Function;
+import ua.bala.stock_feed_public_oauth2_viewer.model.entity.User;
 
 public interface UserService {
 
@@ -13,5 +11,4 @@ public interface UserService {
     Mono<Boolean> existsByEmail(String email);
     Mono<User> resetPasswordByEmail(String email);
     Mono<User> setNewPassword(String token, String newPassword);
-    Mono<User> processToken(String token, Function<User, User> userFunction);
 }

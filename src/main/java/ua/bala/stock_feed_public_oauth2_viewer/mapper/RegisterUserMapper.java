@@ -4,7 +4,7 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ua.bala.stock_feed_public_oauth2_viewer.dto.RegisterUserDTO;
-import ua.bala.stock_feed_public_oauth2_viewer.model.User;
+import ua.bala.stock_feed_public_oauth2_viewer.model.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface RegisterUserMapper {
