@@ -40,8 +40,7 @@ public class HttpQuoteClient implements QuoteClient {
                         error -> Mono.error(new RuntimeException("API not found")))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToFlux(QuoteDTO.class)
-                .retry();
+                .bodyToFlux(QuoteDTO.class);
     }
 
     @Override

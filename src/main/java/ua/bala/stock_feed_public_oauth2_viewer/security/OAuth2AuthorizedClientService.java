@@ -15,7 +15,7 @@ import javax.naming.OperationNotSupportedException;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CustomReactiveOAuth2AuthorizedClientService implements ReactiveOAuth2AuthorizedClientService {
+public class OAuth2AuthorizedClientService implements ReactiveOAuth2AuthorizedClientService {
 
     private final RegisterService registerServiceImpl;
 

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
+import ua.bala.stock_feed_public_oauth2_viewer.util.TokenUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final ReactiveAuthenticationManager authenticationManager;
     private final ReactiveUserDetailsService reactiveUserDetailsService;
-    private final ua.bala.stock_feed_public_oauth2_viewer.util.TokenUtil TokenUtil;
+    private final TokenUtil tokenUtil;
 
     @Override
     public Mono<String> login(String username, String password) {
@@ -30,6 +31,6 @@ public class AuthServiceImpl implements AuthService {
                         .map(AbstractAuthenticationToken::isAuthenticated))
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authorized")))
                 .map(UserDetails::getUsername)
-                .map(TokenUtil::generateToken);
+                .map(tokenUtil::generateToken);
     }
 }

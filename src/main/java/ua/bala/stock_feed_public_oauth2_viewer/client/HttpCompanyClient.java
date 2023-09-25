@@ -33,7 +33,6 @@ public class HttpCompanyClient implements CompanyClient {
                         error -> Mono.error(new RuntimeException("API not found")))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToFlux(CompanyDTO.class)
-                .retry();
+                .bodyToFlux(CompanyDTO.class);
     }
 }
