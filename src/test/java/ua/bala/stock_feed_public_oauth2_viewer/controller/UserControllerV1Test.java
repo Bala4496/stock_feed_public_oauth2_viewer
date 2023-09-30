@@ -1,24 +1,14 @@
 package ua.bala.stock_feed_public_oauth2_viewer.controller;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.test.StepVerifier;
-import ua.bala.stock_feed_public_oauth2_viewer.config.WebFluxSecurityConfig;
 import ua.bala.stock_feed_public_oauth2_viewer.dto.UserDTO;
 import ua.bala.stock_feed_public_oauth2_viewer.model.entity.Token;
 import ua.bala.stock_feed_public_oauth2_viewer.model.entity.User;
@@ -37,46 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 
-@Testcontainers
-@Import(WebFluxSecurityConfig.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerV1Test {
+class UserControllerV1Test extends BaseIntegrationTest {
 
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
-            .withDatabaseName("test")
-            .withUsername("test")
-            .withPassword("test");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.r2dbc.url", () -> "r2dbc:postgresql://%s:%d/%s".formatted(
-                postgres.getHost(),
-                postgres.getFirstMappedPort(),
-                postgres.getDatabaseName())
-        );
-        registry.add("spring.r2dbc.username", postgres::getUsername);
-        registry.add("spring.r2dbc.password", postgres::getPassword);
-
-        registry.add("spring.flyway.url", postgres::getJdbcUrl);
-        registry.add("spring.flyway.user", postgres::getUsername);
-        registry.add("spring.flyway.password", postgres::getPassword);
-    }
-
-    @BeforeAll
-    static void startContainers() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void stopContainers() {
-        postgres.stop();
-    }
-
-    private static final String TEST_EMAIL = "test.account@gmail.com";
-    private static final String TEST_PASSWORD = "password";
-    private static final String TEST_TOKEN = "super_secret_test_token";
-    @Autowired
-    private WebTestClient webClient;
     @Autowired
     private UserRepository userRepository;
     @MockBean
