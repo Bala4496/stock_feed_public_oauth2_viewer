@@ -11,6 +11,7 @@ services:
     environment:
       DB_HOST: stock-feed-public-viewer-postgres:5432
       STOCK_FEED_VIEWER_HOST: stock-feed-viewer-app:8090
+      KAFKA_SERVERS: kafka:9092
       MAIL_USERNAME: stock.feed.viewer@gmail.com
       MAIL_PASSWORD: isttqmarsbtmujxu
       GOOGLE_CLIENT_ID: 1073533900026-km9jbbarc1h1qt0eehn84qir4g6vri2c.apps.googleusercontent.com
@@ -24,6 +25,7 @@ services:
     networks:
       - stock-feed-viewer-oauth2-network
       - stock-feed-network
+      - stock-feed-kafka-network
 
   postgres:
     image: postgres:latest
@@ -45,4 +47,6 @@ volumes:
 networks:
   stock-feed-viewer-oauth2-network:
   stock-feed-network:
+    external: true
+  stock-feed-kafka-network:
     external: true

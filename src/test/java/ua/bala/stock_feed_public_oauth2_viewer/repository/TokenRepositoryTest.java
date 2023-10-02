@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 class TokenRepositoryTest {
 
+    private static final String FIRST_NAME = "First name";
+    private static final String LAST_NAME = "Last name";
     private static final String TEST_TOKEN = "super_secret_test_token";
     private static final String TEST_EMAIL = "test.account@gmail.com";
     private static final String TEST_PASSWORD = "password";
@@ -93,6 +95,8 @@ class TokenRepositoryTest {
 
     private static User getTestUser() {
         return new User()
+                .setFirstName(FIRST_NAME)
+                .setLastName(LAST_NAME)
                 .setEmail(TEST_EMAIL)
                 .setPassword(TEST_PASSWORD)
                 .setRole(UserRole.ROLE_USER)

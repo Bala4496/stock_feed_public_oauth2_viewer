@@ -4,8 +4,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import reactor.test.StepVerifier;
 import ua.bala.stock_feed_public_oauth2_viewer.dto.RegisterUserDTO;
 import ua.bala.stock_feed_public_oauth2_viewer.dto.UserDTO;
@@ -16,6 +14,7 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.enums.TokenType;
 import ua.bala.stock_feed_public_oauth2_viewer.model.enums.UserRole;
 import ua.bala.stock_feed_public_oauth2_viewer.repository.TokenRepository;
 import ua.bala.stock_feed_public_oauth2_viewer.repository.UserRepository;
+import ua.bala.stock_feed_public_oauth2_viewer.service.email.RegistrationEmailMessageProducer;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +25,7 @@ import static org.mockito.Mockito.doNothing;
 class RegisterControllerV1Test extends BaseIntegrationTest {
 
     @MockBean
-    private JavaMailSender mailSender;
+    private RegistrationEmailMessageProducer registrationEmailMessageProducer;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -40,9 +39,13 @@ class RegisterControllerV1Test extends BaseIntegrationTest {
 
     @Test
     void shouldRegisterUser() {
-        var registerUserDTO = new RegisterUserDTO().setEmail(TEST_EMAIL).setPassword(TEST_PASSWORD);
+        var registerUserDTO = new RegisterUserDTO()
+                .setFirstName(FIRST_NAME)
+                .setLastName(LAST_NAME)
+                .setEmail(TEST_EMAIL)
+                .setPassword(TEST_PASSWORD);
 
-        doNothing().when(mailSender).send(any(SimpleMailMessage.class));
+        doNothing().when(registrationEmailMessageProducer).sendRegistrationEmail(any(User.class));
 
         var result = webClient.post()
                 .uri("/api/v1/register")
@@ -81,14 +84,6 @@ class RegisterControllerV1Test extends BaseIntegrationTest {
                     assertTrue(user.isEnabled());
                 })
                 .verifyComplete();
-    }
-
-    private static User getTestUser() {
-        return new User()
-                .setEmail(TEST_EMAIL)
-                .setPassword(TEST_PASSWORD)
-                .setRole(UserRole.ROLE_USER)
-                .setProvider(Provider.LOCAL);
     }
 
     private static Token getTestRegisterToken(long userId) {

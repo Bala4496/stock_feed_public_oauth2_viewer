@@ -12,6 +12,7 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.entity.User;
 import ua.bala.stock_feed_public_oauth2_viewer.model.enums.Provider;
 import ua.bala.stock_feed_public_oauth2_viewer.model.enums.UserRole;
 import ua.bala.stock_feed_public_oauth2_viewer.service.email.EmailService;
+import ua.bala.stock_feed_public_oauth2_viewer.service.email.RegistrationEmailMessageProducer;
 import ua.bala.stock_feed_public_oauth2_viewer.service.email.TokenService;
 
 import java.util.function.Function;
@@ -37,13 +38,13 @@ class RegisterServiceTest {
     @Mock
     private TokenService tokenService;
     @Mock
-    private EmailService emailService;
+    private RegistrationEmailMessageProducer registrationEmailMessageProducer;
 
     @Test
     void shouldRegisterLocalUser() {
         var testUser = getTestUser().setRole(null).setProvider(null).setEnabled(false);
 
-        doNothing().when(emailService).sendResetPasswordEmail(testUser.setEnabled(false));
+        doNothing().when(registrationEmailMessageProducer).sendRegistrationEmail(testUser.setEnabled(false));
         when(userService.save(any(User.class))).thenAnswer(invocation -> Mono.just(invocation.getArgument(0, User.class)));
         when(passwordEncoder.encode(anyString())).thenAnswer(invocation -> invocation.getArgument(0, String.class));
 

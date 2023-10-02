@@ -11,6 +11,8 @@ import ua.bala.stock_feed_public_oauth2_viewer.model.enums.UserRole;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RegisterUserDTO {
 
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private UserRole role;

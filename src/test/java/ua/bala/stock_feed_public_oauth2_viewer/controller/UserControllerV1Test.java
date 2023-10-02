@@ -11,7 +11,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import reactor.test.StepVerifier;
 import ua.bala.stock_feed_public_oauth2_viewer.dto.UserDTO;
 import ua.bala.stock_feed_public_oauth2_viewer.model.entity.Token;
-import ua.bala.stock_feed_public_oauth2_viewer.model.entity.User;
 import ua.bala.stock_feed_public_oauth2_viewer.model.enums.Provider;
 import ua.bala.stock_feed_public_oauth2_viewer.model.enums.TokenType;
 import ua.bala.stock_feed_public_oauth2_viewer.model.enums.UserRole;
@@ -130,16 +129,7 @@ class UserControllerV1Test extends BaseIntegrationTest {
                 .verifyComplete();
     }
 
-    private static User getTestUser() {
-        return new User()
-                .setEmail(TEST_EMAIL)
-                .setPassword(TEST_PASSWORD)
-                .setRole(UserRole.ROLE_USER)
-                .setProvider(Provider.LOCAL)
-                .setEnabled(true);
-    }
-
-    private static Token getTestResetPasswordToken(long userId) {
+    protected static Token getTestResetPasswordToken(long userId) {
         var now = LocalDateTime.now();
         return new Token().setUserId(userId)
                 .setToken(TEST_TOKEN)

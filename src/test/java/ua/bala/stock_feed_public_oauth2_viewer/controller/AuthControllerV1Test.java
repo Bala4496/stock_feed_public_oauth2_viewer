@@ -4,9 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import reactor.test.StepVerifier;
-import ua.bala.stock_feed_public_oauth2_viewer.model.entity.User;
-import ua.bala.stock_feed_public_oauth2_viewer.model.enums.Provider;
-import ua.bala.stock_feed_public_oauth2_viewer.model.enums.UserRole;
 import ua.bala.stock_feed_public_oauth2_viewer.model.request.AuthRequest;
 import ua.bala.stock_feed_public_oauth2_viewer.model.response.AuthResponse;
 import ua.bala.stock_feed_public_oauth2_viewer.repository.UserRepository;
@@ -34,14 +31,5 @@ class AuthControllerV1Test extends BaseIntegrationTest {
         StepVerifier.create(result.getResponseBody())
                 .consumeNextWith(authResponse -> assertTrue(StringUtils.hasText(authResponse.getToken())))
                 .verifyComplete();
-    }
-
-    private static User getTestUser() {
-        return new User()
-                .setEmail(TEST_EMAIL)
-                .setPassword(TEST_PASSWORD)
-                .setRole(UserRole.ROLE_USER)
-                .setProvider(Provider.LOCAL)
-                .setEnabled(true);
     }
 }

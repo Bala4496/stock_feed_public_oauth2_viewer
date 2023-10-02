@@ -4,7 +4,7 @@ server:
 spring:
 
   application:
-    name: stockfeedpublicviewer
+    name: stock_feed_public_viewer
 
   security:
     oauth2:
@@ -41,6 +41,15 @@ spring:
           auth: true
           starttls:
             enable: true
+
+  kafka:
+    template:
+      default-topic: stock-feed-topic
+    bootstrap-servers: ${KAFKA_SERVERS:localhost:29092}
+    producer:
+      client-id: ${spring.application.name}
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 stock-feed-viewer-api:
   url: ${STOCK_FEED_VIEWER_HOST:localhost:8090}
